@@ -3,10 +3,13 @@ from flask import Flask, request, jsonify, send_from_directory
 from moviepy.editor import *
 import requests
 import os
-import uuid
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static'
+
+# ✅ Create the static folder if it doesn't exist
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 
 @app.route('/generate', methods=['POST'])
 def generate_video():
