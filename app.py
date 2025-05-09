@@ -29,7 +29,7 @@ def generate_video():
             tmp_audio_file.write(response.content)
             tmp_audio_path = tmp_audio_file.name
 
-        # Load audio from the temp file
+        # Load audio
         audio = AudioFileClip(tmp_audio_path)
 
         # Create background video
@@ -39,9 +39,21 @@ def generate_video():
         output_filename = "factopia_short.mp4"
         output_path = os.path.join(app.config['UPLOAD_FOLDER'], output_filename)
 
-        background.write_videofile(output_path, fps=24, codec='libx264', audio_codec='aac')
+        # Remove existing file if needed
+        if os.path.exists(output_path):
+            os.remove(output_path)
 
-        # Cleanup temp audio
+        # Write video with lower bitrate and safer settings
+        background.write_videofile(
+            output_path,
+            fps=24,
+            codec='libx264',
+            audio_codec='aac',
+            bitrate='500k',
+            verbose=False,
+            threads=1
+        )
+
         os.remove(tmp_audio_path)
 
         return jsonify({'video_url': f"{request.url_root}static/{output_filename}"})
