@@ -13,7 +13,7 @@ os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 @app.route('/generate', methods=['POST'])
 def generate_video():
     data = request.get_json()
-    script = data.get('script')
+    script = data.get('script')    
     voice_url = data.get('voice_url')
 
     if not script or not voice_url:
